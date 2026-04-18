@@ -1,0 +1,17 @@
+# Docker
+*.log
+.env
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+
+# Python / Django
+__pycache__/
+*.pyc
+venv/
+.env
+
+# OS
+.DS_Store

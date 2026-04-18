@@ -1,0 +1,51 @@
+<div class="page">
+  <div class="list-header">
+    <div>
+      <h1 class="page-title">Prompt Library</h1>
+      <p class="page-subtitle">{{ prompts.length }} saved prompt{{ prompts.length !== 1 ? 's' : '' }}</p>
+    </div>
+    <a routerLink="/add-prompt" class="btn btn-primary">+ New Prompt</a>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="state-box">
+    <div class="spinner"></div>
+    <p>Loading prompts...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="state-box">
+    <div class="icon">⚠️</div>
+    <h3>Something went wrong</h3>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && prompts.length === 0" class="state-box">
+    <div class="icon">📭</div>
+    <h3>No prompts yet</h3>
+    <p>Add your first prompt to get started.</p>
+    <br>
+    <a routerLink="/add-prompt" class="btn btn-primary">Create Prompt</a>
+  </div>
+
+  <!-- Prompt cards -->
+  <div *ngIf="!loading && !error && prompts.length > 0" class="prompt-grid">
+    <a
+      *ngFor="let prompt of prompts"
+      [routerLink]="['/prompts', prompt.id]"
+      class="prompt-card"
+    >
+      <div class="prompt-card-top">
+        <h2 class="prompt-title">{{ prompt.title }}</h2>
+        <span [class]="getBadgeClass(prompt.complexity)">
+          {{ getBadgeLabel(prompt.complexity) }}
+        </span>
+      </div>
+      <div class="prompt-card-footer">
+        <span class="prompt-date">{{ prompt.created_at | date:'mediumDate' }}</span>
+        <span class="prompt-arrow">→</span>
+      </div>
+    </a>
+  </div>
+</div>

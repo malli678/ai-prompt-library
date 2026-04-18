@@ -1,0 +1,55 @@
+<div class="page">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="state-box">
+    <div class="spinner"></div>
+    <p>Loading prompt...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="state-box">
+    <div class="icon">⚠️</div>
+    <h3>{{ error }}</h3>
+    <br>
+    <button class="btn btn-secondary" (click)="goBack()">← Back to Library</button>
+  </div>
+
+  <!-- Prompt content -->
+  <div *ngIf="!loading && !error && prompt">
+    <button class="back-btn" (click)="goBack()">← Back to Library</button>
+
+    <div class="detail-card card">
+      <div class="detail-header">
+        <h1 class="detail-title">{{ prompt.title }}</h1>
+        <span [class]="getBadgeClass(prompt.complexity)">
+          {{ getBadgeLabel(prompt.complexity) }}
+        </span>
+      </div>
+
+      <div class="detail-meta">
+        <div class="meta-item">
+          <span class="meta-label">Created</span>
+          <span class="meta-value">{{ prompt.created_at | date:'medium' }}</span>
+        </div>
+        <div class="meta-item views-pill">
+          <span class="views-icon">👁</span>
+          <span class="views-count">{{ prompt.view_count }}</span>
+          <span class="views-label">view{{ prompt.view_count !== 1 ? 's' : '' }}</span>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="content-section">
+        <h2 class="content-label">Prompt Content</h2>
+        <div class="content-box">{{ prompt.content }}</div>
+      </div>
+
+      <div class="copy-row">
+        <button class="btn btn-primary" (click)="copyContent()">
+          {{ copied ? '✓ Copied!' : '📋 Copy Prompt' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

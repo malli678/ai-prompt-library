@@ -1,0 +1,82 @@
+<div class="page">
+  <div class="form-page-header">
+    <h1 class="page-title">New Prompt</h1>
+    <p class="page-subtitle">Fill in the details below to save a new AI image prompt.</p>
+  </div>
+
+  <div class="card form-card">
+    <form [formGroup]="promptForm" (ngSubmit)="onSubmit()">
+
+      <!-- Title -->
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          id="title"
+          type="text"
+          formControlName="title"
+          placeholder="e.g. Cyberpunk city at night"
+          [class.invalid]="isInvalid(title)"
+        />
+        <div class="error-msg" *ngIf="isInvalid(title)">
+          <span *ngIf="title.errors?.['required']">Title is required.</span>
+          <span *ngIf="title.errors?.['minlength']">Title must be at least 3 characters.</span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="form-group">
+        <label for="content">Prompt Content</label>
+        <textarea
+          id="content"
+          formControlName="content"
+          rows="6"
+          placeholder="Describe your image generation prompt in detail..."
+          [class.invalid]="isInvalid(content)"
+        ></textarea>
+        <div class="char-hint">{{ content.value?.length || 0 }} characters</div>
+        <div class="error-msg" *ngIf="isInvalid(content)">
+          <span *ngIf="content.errors?.['required']">Content is required.</span>
+          <span *ngIf="content.errors?.['minlength']">Content must be at least 20 characters.</span>
+        </div>
+      </div>
+
+      <!-- Complexity -->
+      <div class="form-group">
+        <label for="complexity">Complexity (1–10)</label>
+        <div class="complexity-row">
+          <input
+            id="complexity"
+            type="number"
+            formControlName="complexity"
+            min="1"
+            max="10"
+            [class.invalid]="isInvalid(complexity)"
+          />
+          <span class="complexity-preview" [class]="getComplexityBadge()">
+            {{ getComplexityLabel() }}
+          </span>
+        </div>
+        <div class="error-msg" *ngIf="isInvalid(complexity)">
+          <span *ngIf="complexity.errors?.['required']">Complexity is required.</span>
+          <span *ngIf="complexity.errors?.['min'] || complexity.errors?.['max']">Complexity must be between 1 and 10.</span>
+        </div>
+      </div>
+
+      <!-- Server-side error -->
+      <div class="submit-error" *ngIf="submitError">
+        ⚠️ {{ submitError }}
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/prompts">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="submitting">
+          {{ submitting ? 'Saving…' : 'Save Prompt' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
