@@ -72,6 +72,7 @@ DATABASES = {
 }
 
 # REDIS
+REDIS_URL = os.environ.get('REDIS_URL') or os.environ.get('REDIS_PUBLIC_URL')
 REDIS_HOST = os.environ.get('REDIS_HOST') or os.environ.get('REDISHOST', 'redis')
 REDIS_PORT = int(os.environ.get('REDIS_PORT') or os.environ.get('REDISPORT', 6379))
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD') or os.environ.get('REDISPASSWORD', None)

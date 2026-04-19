@@ -8,13 +8,16 @@ from django.views.decorators.http import require_http_methods
 
 from .models import Prompt
 
-r = redis.Redis(
-    host=settings.REDIS_HOST, 
-    port=settings.REDIS_PORT, 
-    password=settings.REDIS_PASSWORD,
-    db=0, 
-    decode_responses=True
-)
+if getattr(settings, 'REDIS_URL', None):
+    r = redis.from_url(settings.REDIS_URL, decode_responses=True)
+else:
+    r = redis.Redis(
+        host=settings.REDIS_HOST, 
+        port=settings.REDIS_PORT, 
+        password=settings.REDIS_PASSWORD,
+        db=0, 
+        decode_responses=True
+    )
 
 
 def validate_prompt_data(data):
@@ -91,7 +94,11 @@ def prompt_detail(request, prompt_id):
         return JsonResponse({'error': 'Prompt not found.'}, status=404)
 
     key = f"prompt:{prompt.id}:views"
-    view_count = r.incr(key)
+    try:
+        view_count = r.incr(key)
+    except Exception as e:
+        print(f"Redis error: {e}")
+        view_count = 0
 
     return JsonResponse({
         'id': prompt.id,
