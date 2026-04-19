@@ -63,17 +63,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'promptdb'),
-        'USER': os.environ.get('POSTGRES_USER', 'promptuser'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'promptpass'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),   # 🔥 must be 'db'
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'NAME': os.environ.get('POSTGRES_DB') or os.environ.get('PGDATABASE', 'promptdb'),
+        'USER': os.environ.get('POSTGRES_USER') or os.environ.get('PGUSER', 'promptuser'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD') or os.environ.get('PGPASSWORD', 'promptpass'),
+        'HOST': os.environ.get('POSTGRES_HOST') or os.environ.get('PGHOST', 'db'),   # 🔥 must be 'db' locally, but PGHOST on railway
+        'PORT': os.environ.get('POSTGRES_PORT') or os.environ.get('PGPORT', '5432'),
     }
 }
 
 # REDIS
-REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
-REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
+REDIS_HOST = os.environ.get('REDIS_HOST') or os.environ.get('REDISHOST', 'redis')
+REDIS_PORT = int(os.environ.get('REDIS_PORT') or os.environ.get('REDISPORT', 6379))
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [

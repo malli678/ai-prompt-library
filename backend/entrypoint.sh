@@ -4,7 +4,9 @@ set -e
 echo "Waiting for PostgreSQL (port check)..."
 
 # Step 1: wait until port is open
-while ! nc -z $POSTGRES_HOST ${POSTGRES_PORT:-5432}; do
+DB_HOST="${POSTGRES_HOST:-${PGHOST:-db}}"
+DB_PORT="${POSTGRES_PORT:-${PGPORT:-5432}}"
+while ! nc -z $DB_HOST $DB_PORT; do
   echo "  PostgreSQL port not open yet..."
   sleep 1
 done
@@ -17,11 +19,11 @@ echo "Checking database connection..."
 while ! python -c "
 import psycopg2, os
 psycopg2.connect(
-    dbname=os.environ.get('POSTGRES_DB','promptdb'),
-    user=os.environ.get('POSTGRES_USER','promptuser'),
-    password=os.environ.get('POSTGRES_PASSWORD','promptpass'),
-    host=os.environ.get('POSTGRES_HOST','db'),
-    port=os.environ.get('POSTGRES_PORT','5432'),
+    dbname=os.environ.get('POSTGRES_DB') or os.environ.get('PGDATABASE','promptdb'),
+    user=os.environ.get('POSTGRES_USER') or os.environ.get('PGUSER','promptuser'),
+    password=os.environ.get('POSTGRES_PASSWORD') or os.environ.get('PGPASSWORD','promptpass'),
+    host=os.environ.get('POSTGRES_HOST') or os.environ.get('PGHOST','db'),
+    port=os.environ.get('POSTGRES_PORT') or os.environ.get('PGPORT','5432'),
 )
 " 2>/dev/null; do
   echo "  Database not ready yet..."
