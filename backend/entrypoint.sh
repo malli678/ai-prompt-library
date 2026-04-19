@@ -41,4 +41,4 @@ python manage.py collectstatic --noinput
 
 # Start server with gunicorn (production WSGI)
 echo "Starting Django server with gunicorn..."
-exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120
+exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
