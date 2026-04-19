@@ -4,7 +4,7 @@ set -e
 echo "Waiting for PostgreSQL (port check)..."
 
 # Step 1: wait until port is open
-while ! nc -z $POSTGRES_HOST 5432; do
+while ! nc -z $POSTGRES_HOST ${POSTGRES_PORT:-5432}; do
   echo "  PostgreSQL port not open yet..."
   sleep 1
 done
@@ -36,4 +36,4 @@ python manage.py migrate --noinput
 
 # Start server with gunicorn (production WSGI)
 echo "Starting Django server with gunicorn..."
-exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
+exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --timeout 120
