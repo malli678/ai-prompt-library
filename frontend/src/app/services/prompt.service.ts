@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface PromptSummary {
   id: number;
@@ -28,7 +29,7 @@ export interface CreatePromptPayload {
   providedIn: 'root'
 })
 export class PromptService {
-  private apiUrl = 'http://localhost:8000/prompts';
+  private apiUrl = `${environment.apiUrl}/prompts`;
 
   constructor(private http: HttpClient) {}
 
